@@ -1,4 +1,4 @@
-# Microservice 101 Example Service
+# Microservice Demo - Advertisement Service
 
 This project is a study of how a basic API microservice should be
 
