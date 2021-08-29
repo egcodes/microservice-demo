@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -62,8 +63,7 @@ class AdvertisementCommandServiceImplTest {
         when(resourceService.getBadWordList()).thenReturn(Arrays.asList("paexueutcu"));
 
         //then
-        var thrown = catchThrowable(() -> advertisementCommandService.add(advertisement));
-        assertThat(thrown).isInstanceOf(AdvertisementException.class);
+        var thrown = assertThrows(AdvertisementException.class, () -> advertisementCommandService.add(advertisement));
         assertThat(thrown.getMessage()).isEqualTo(ValidationRule.TITLE_NOT_ALLOWED.getError());
     }
 
@@ -91,8 +91,7 @@ class AdvertisementCommandServiceImplTest {
         when(advertisementRepository.findById(anyLong())).thenReturn(advertisementMaybe);
 
         //then
-        var thrown = catchThrowable(() -> advertisementCommandService.changeStatus(1L, Status.ACTIVE));
-        assertThat(thrown).isInstanceOf(AdvertisementException.class);
+        var thrown = assertThrows(AdvertisementException.class, () -> advertisementCommandService.changeStatus(1L, Status.ACTIVE));
         assertThat(thrown.getMessage()).isEqualTo(ValidationRule.UPDATE_DUPLICATE_ADS_NOT_ALLOWED.getError());
     }
 
@@ -107,8 +106,7 @@ class AdvertisementCommandServiceImplTest {
         when(advertisementRepository.findById(anyLong())).thenReturn(advertisementMaybe);
 
         //then
-        var thrown = catchThrowable(() -> advertisementCommandService.changeStatus(1L, Status.ACTIVE));
-        assertThat(thrown).isInstanceOf(AdvertisementException.class);
+        var thrown = assertThrows(AdvertisementException.class, () -> advertisementCommandService.changeStatus(1L, Status.ACTIVE));
         assertThat(thrown.getMessage()).isEqualTo(ValidationRule.ADVERTISEMENT_STATUS_NOT_SUITABLE.getError());
     }
 
