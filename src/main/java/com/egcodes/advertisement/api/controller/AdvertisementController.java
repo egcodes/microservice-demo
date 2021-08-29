@@ -9,6 +9,7 @@ import com.egcodes.advertisement.service.advertisement.AdvertisementQueryService
 import com.egcodes.advertisement.service.status.StatusHistoryQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/advertisement")
 @Api(value = "Advertisement")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class AdvertisementController {
 
@@ -28,15 +30,6 @@ public class AdvertisementController {
     private final AdvertisementQueryService advertisementQueryService;
     private final StatusHistoryQueryService statusHistoryQueryService;
     private final AdvertisementMapper advertisementMapper;
-
-    @Autowired
-    public AdvertisementController(AdvertisementCommandService advertisementCommandService, AdvertisementQueryService advertisementQueryService,
-                                   StatusHistoryQueryService statusHistoryQueryService, AdvertisementMapper advertisementMapper) {
-        this.advertisementCommandService = advertisementCommandService;
-        this.advertisementQueryService = advertisementQueryService;
-        this.statusHistoryQueryService = statusHistoryQueryService;
-        this.advertisementMapper = advertisementMapper;
-    }
 
     @PostMapping(value = "/add")
     @ApiOperation(value = "Add advertisement", notes = "Adding new advertisements with title, detail and category")

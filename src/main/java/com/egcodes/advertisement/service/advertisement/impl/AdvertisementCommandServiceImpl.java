@@ -10,6 +10,7 @@ import com.egcodes.advertisement.persistence.repository.AdvertisementRepository;
 import com.egcodes.advertisement.service.ResourceService;
 import com.egcodes.advertisement.service.advertisement.AdvertisementCommandService;
 import com.egcodes.advertisement.service.status.StatusHistoryCommandService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,20 +22,12 @@ import java.util.Arrays;
 @Service
 @Transactional
 @Slf4j
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AdvertisementCommandServiceImpl implements AdvertisementCommandService {
 
     private final AdvertisementRepository advertisementRepository;
     private final StatusHistoryCommandService statusHistoryCommandService;
     private final ResourceService resourceService;
-
-    @Autowired
-    public AdvertisementCommandServiceImpl(AdvertisementRepository advertisementRepository,
-                                           StatusHistoryCommandService statusHistoryCommandService,
-                                           ResourceService resourceService) {
-        this.advertisementRepository = advertisementRepository;
-        this.statusHistoryCommandService = statusHistoryCommandService;
-        this.resourceService = resourceService;
-    }
 
     @Override
     public Advertisement add(Advertisement advertisement) {
@@ -121,7 +114,7 @@ public class AdvertisementCommandServiceImpl implements AdvertisementCommandServ
     }
 
     private boolean areThereAnyBadWords(String word) {
-        return resourceService.getBadWordList().stream().anyMatch(s -> word.contains(s));
+        return resourceService.getBadWordList().stream().anyMatch(word::contains);
     }
 
 }

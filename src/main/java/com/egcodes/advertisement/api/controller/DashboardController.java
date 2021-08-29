@@ -7,6 +7,7 @@ import com.egcodes.advertisement.service.status.StatusHistoryQueryService;
 import com.egcodes.advertisement.dto.Statistics;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +21,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/dashboard/classifieds")
 @Api(value = "Dashboard")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class DashboardController {
 
     private final AdvertisementCommandService advertisementCommandService;
     private final AdvertisementQueryService advertisementQueryService;
     private final StatusHistoryQueryService statusHistoryQueryService;
-
-    @Autowired
-    public DashboardController(AdvertisementCommandService advertisementCommandService, AdvertisementQueryService advertisementQueryService, StatusHistoryQueryService statusHistoryQueryService) {
-        this.advertisementCommandService = advertisementCommandService;
-        this.advertisementQueryService = advertisementQueryService;
-        this.statusHistoryQueryService = statusHistoryQueryService;
-    }
 
     @GetMapping(value = "/list")
     @ApiOperation(value = "Get advertisements", notes = "List all advertisements")
