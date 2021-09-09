@@ -1,10 +1,8 @@
 package com.egcodes.advertisement.api.controller;
 
 import com.egcodes.advertisement.dto.AdvertisementDTO;
-import com.egcodes.advertisement.service.advertisement.AdvertisementCommandService;
-import com.egcodes.advertisement.service.advertisement.AdvertisementQueryService;
-import com.egcodes.advertisement.service.status.StatusHistoryQueryService;
 import com.egcodes.advertisement.dto.Statistics;
+import com.egcodes.advertisement.service.advertisement.AdvertisementQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/dashboard/classifieds")
 @Api(value = "Dashboard")
@@ -25,9 +22,7 @@ import java.util.List;
 @Slf4j
 public class DashboardController {
 
-    private final AdvertisementCommandService advertisementCommandService;
     private final AdvertisementQueryService advertisementQueryService;
-    private final StatusHistoryQueryService statusHistoryQueryService;
 
     @GetMapping(value = "/list")
     @ApiOperation(value = "Get advertisements", notes = "List all advertisements")

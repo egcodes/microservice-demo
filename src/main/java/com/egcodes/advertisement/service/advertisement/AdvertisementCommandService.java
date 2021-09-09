@@ -5,7 +5,7 @@ import com.egcodes.advertisement.enums.Status;
 
 public interface AdvertisementCommandService {
 
-    Advertisement add(Advertisement advertisement);
+    Advertisement add(Advertisement ad);
     Advertisement changeStatus(Long id, Status status);
 
 }

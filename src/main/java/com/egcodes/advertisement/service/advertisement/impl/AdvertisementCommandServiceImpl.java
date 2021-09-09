@@ -30,39 +30,39 @@ public class AdvertisementCommandServiceImpl implements AdvertisementCommandServ
     private final ResourceService resourceService;
 
     @Override
-    public Advertisement add(Advertisement advertisement) {
-        advertisement.setCreateDate(OffsetDateTime.now());
-        advertisement.setStatus(Status.WAITING_FOR_APPROVAL);
+    public Advertisement add(Advertisement ad) {
+        ad.setCreateDate(OffsetDateTime.now());
+        ad.setStatus(Status.WAITING_FOR_APPROVAL);
 
-        if (areThereAnyBadWords(advertisement.getTitle())) {
+        if (areThereAnyBadWords(ad.getTitle())) {
             throw new AdvertisementException(ValidationRule.TITLE_NOT_ALLOWED);
         }
 
-        if (areThereAnySimilarAdvertisementByTitleDetailCategory(advertisement)) {
-            advertisement.setStatus(Status.DUPLICATE);
+        if (areThereAnySimilarAdvertisementByTitleDetailCategory(ad)) {
+            ad.setStatus(Status.DUPLICATE);
         }
 
-        switch (advertisement.getCategory()) {
+        switch (ad.getCategory()) {
             case PROPERTY:
-                advertisement.setEndDate(advertisement.getCreateDate().plusWeeks(AdExpiryTimes.PROPERTY));
+                ad.setEndDate(ad.getCreateDate().plusWeeks(AdExpiryTimes.PROPERTY));
                 break;
             case VEHICLE:
-                advertisement.setEndDate(advertisement.getCreateDate().plusWeeks(AdExpiryTimes.VEHICLE));
+                ad.setEndDate(ad.getCreateDate().plusWeeks(AdExpiryTimes.VEHICLE));
                 break;
             case OTHER:
-                advertisement.setEndDate(advertisement.getCreateDate().plusWeeks(AdExpiryTimes.OTHER));
+                ad.setEndDate(ad.getCreateDate().plusWeeks(AdExpiryTimes.OTHER));
                 break;
             case SHOPPING:
-                advertisement.setStatus(Status.ACTIVE);
-                advertisement.setEndDate(advertisement.getCreateDate().plusWeeks(AdExpiryTimes.SHOPPING));
+                ad.setStatus(Status.ACTIVE);
+                ad.setEndDate(ad.getCreateDate().plusWeeks(AdExpiryTimes.SHOPPING));
                 break;
             default:
                 throw new AdvertisementException(ValidationRule.CATEGORY_NOT_ALLOWED);
         }
 
-        advertisement.setStatusHistory(Arrays.asList(addStatusHistory(advertisement, advertisement.getStatus())));
+        ad.setStatusHistory(Arrays.asList(addStatusHistory(ad, ad.getStatus())));
 
-        return advertisementRepository.save(advertisement);
+        return advertisementRepository.save(ad);
     }
 
     @Override
@@ -91,23 +91,23 @@ public class AdvertisementCommandServiceImpl implements AdvertisementCommandServ
         }
     }
 
-    private boolean areThereAnySimilarAdvertisementByTitleDetailCategory(Advertisement advertisement) {
-        return advertisementRepository.countByTitleAndDetailAndCategory(advertisement.getTitle(), advertisement.getDetail(), advertisement.getCategory()) > 0;
+    private boolean areThereAnySimilarAdvertisementByTitleDetailCategory(Advertisement ad) {
+        return advertisementRepository.countByTitleAndDetailAndCategory(ad.getTitle(), ad.getDetail(), ad.getCategory()) > 0;
     }
 
-    private boolean isSuitableToActivate(Advertisement advertisement, Status status) {
-        return status.equals(Status.ACTIVE) && advertisement.getStatus().equals(Status.WAITING_FOR_APPROVAL);
+    private boolean isSuitableToActivate(Advertisement ad, Status status) {
+        return status.equals(Status.ACTIVE) && ad.getStatus().equals(Status.WAITING_FOR_APPROVAL);
     }
 
-    private boolean isSuitableToDeactivate(Advertisement advertisement, Status status) {
+    private boolean isSuitableToDeactivate(Advertisement ad, Status status) {
         return status.equals(Status.DEACTIVATE)
-                && (advertisement.getStatus().equals(Status.ACTIVE) || advertisement.getStatus().equals(Status.WAITING_FOR_APPROVAL));
+                && (ad.getStatus().equals(Status.ACTIVE) || ad.getStatus().equals(Status.WAITING_FOR_APPROVAL));
     }
 
-    private StatusHistory addStatusHistory(Advertisement advertisement, Status status) {
+    private StatusHistory addStatusHistory(Advertisement ad, Status status) {
         var statusHistory = StatusHistory.builder()
                 .status(status)
-                .advertisement(advertisement)
+                .advertisement(ad)
                 .updatedDate(OffsetDateTime.now())
                 .build();
         return statusHistoryCommandService.add(statusHistory);
