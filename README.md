@@ -12,6 +12,7 @@ This project is a study of how a basic API microservice should be
 * h2
 * Lombok
 * rest-assured
+* shedlock
 
 
 ## Follow the below steps to containerize the application
